@@ -4,11 +4,13 @@ import { FaYoutube } from "react-icons/fa";
 
 const apikey = "3fb4c3ddfc88192745a5708f0de70cba";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
+const PROFILE_BASE_URL = "https://image.tmdb.org/t/p/w200";
 
 function Singel() {
   const { id } = useParams();
   const [movieDetails, setMovieDetails] = useState({});
   const [trailerKey, setTrailerKey] = useState(null);
+  const [cast, setCast] = useState([]);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -42,8 +44,21 @@ function Singel() {
       }
     };
 
+    const fetchCast = async () => {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apikey}`
+        );
+        const data = await response.json();
+        setCast(data.cast || []);
+      } catch (error) {
+        console.error("Error fetching cast:", error);
+      }
+    };
+
     fetchMovieDetails();
     fetchTrailer();
+    fetchCast();
   }, [id]);
 
   return (
@@ -55,7 +70,7 @@ function Singel() {
               src={`${IMAGE_BASE_URL}${movieDetails.poster_path}`}
               alt={movieDetails.title}
               className="movie-poster"
-              style={{ width: "300px", height: "auto", borderRadius: "10px" }}
+            
             />
           )}
         </div>
@@ -64,7 +79,7 @@ function Singel() {
           <h1>{movieDetails.tagline}</h1>
           <h2>{movieDetails.original_title}</h2>
           <p>{movieDetails.overview}</p>
-          <div className="span" >
+          <div className="span">
             {trailerKey ? (
               <span
                 onClick={() =>
@@ -72,14 +87,41 @@ function Singel() {
                 }
                 style={{ cursor: "pointer" }}
               >
-                <FaYoutube />
+                <FaYoutube  />
               </span>
             ) : (
-              <span style={{ opacity: 0.5 }}>
-                <FaYoutube />
+              <span >
+                <FaYoutube  />
               </span>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="top_cast" >
+        <h2>Top Cast</h2>
+        <div
+          className="cast_list"
+      
+        >
+
+          <div className="member">
+                {cast.map((actor) => (
+            <div key={actor.id} className="cast_member" >
+              {actor.profile_path && (
+                <img
+                  src={`${PROFILE_BASE_URL}${actor.profile_path}`}
+                  alt=""
+                  
+             
+                />
+              )}
+                <h5 className="actor">{actor.name}</h5>
+
+            </div>
+          ))}
+          </div>
+      
         </div>
       </div>
     </>

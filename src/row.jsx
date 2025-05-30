@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from "react";
-// import { baseImageUrl } from "./data";
-import { useNavigate } from "react-router-dom"; 
-function row({ urls, heading, btn1, btn2 }) {
+import { Link, useNavigate } from "react-router-dom";
+
+function Row({ urls, heading, btn1, btn2 }) {
   const [movieData, setMovieData] = useState([]);
   const [selectedUrl, setSelectedUrl] = useState(urls[0]);
-  const [activeButton, setActive] = useState([0]);
+  const [activeButton, setActiveButton] = useState(0);
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
- const [selectedMovie, setSelectedMovie] = useState(null);
 
- const navigate = useNavigate();
- 
-const handleMovieClick = (movie) => {
-  navigate(`/movie/${movie.id}`);
-};
+  const navigate = useNavigate();
 
-
-
-
+  const handleMovieClick = (movie) => {
+    navigate(`/movie/${movie.id}`);
+  };
 
   useEffect(() => {
     async function fetchMovies() {
@@ -33,13 +28,14 @@ const handleMovieClick = (movie) => {
   }, [selectedUrl]);
 
   function trimContent(content) {
-    if (content.length > 20) {
+    if (content && content.length > 20) {
       return content.slice(0, 15) + "...";
     }
+    return content;
   }
 
   const handleClick = (i) => {
-    setActive(i);
+    setActiveButton(i);
     setSelectedUrl(urls[i]);
   };
 
@@ -47,27 +43,32 @@ const handleMovieClick = (movie) => {
     <section>
       <header className="header">
         <h2>{heading}</h2>
-        <div className="btn1">
-          <div className="gradient">
-            {" "}
-            <button onClick={() => handleClick(0)}>{btn1}</button>
-          </div>
+        <div className="btn-group">
+    <button
+  className={activeButton === 0 ? "active-btn" : ""}
+  onClick={() => handleClick(0)}
+>
+  {btn1}
+</button>
 
-          <div className="btn2">
-            {" "}
-            <button onClick={() => handleClick(1)}>{btn2}</button>
-          </div>
+<button
+  className={activeButton === 1 ? "active-btn" : ""}
+  onClick={() => handleClick(1)}
+>
+  {btn2}
+</button>
+
         </div>
       </header>
 
-      {/* Movie Grid */}
       <div className="movieWrapper">
         {movieData.length > 0 ? (
           movieData.map((movie) => (
             <div
               key={movie.id}
+              className="movieBox"
               onClick={() => handleMovieClick(movie)}
-              className="movieBOx"
+              style={{ cursor: "pointer" }}
             >
               {movie.poster_path && (
                 <img
@@ -98,4 +99,4 @@ const handleMovieClick = (movie) => {
   );
 }
 
-export default row;
+export default Row;

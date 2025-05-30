@@ -216,7 +216,7 @@ font-size: 90px;
   margin-bottom: 10px;
 }
 
-.para {
+.description {
   font-size: 24px;
   color: #f4f4f4;
   margin-bottom: 20px;
@@ -338,4 +338,300 @@ font-size: 90px;
   color: red;
   font-size: 50px;
   cursor: pointer;
+
+
+}
+.top_cast{
+  padding-top: 10px;
+  text-align: center;
+  font-size: 20px;
+}
+.actor{
+  margin-top: 20px;
+}
+.member img{
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+}
+.cast_member{
+  padding-top: 70px;
+}
+
+.member {
+  
+    display: grid;
+
+    grid-auto-flow: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    overflow-y: scroll;
+    scroll-snap-type: x mandatory;
+ 
+}
+
+.member::-webkit-scrollbar{
+    display: none;
+}
+
+.results-container::-webkit-scrollbar{
+    display: none;
+}
+
+.results-container {
+  
+    display: grid;
+
+    grid-auto-flow: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    overflow-y: scroll;
+    scroll-snap-type: x mandatory;
+  background-color: #08082d;
+
+ 
+}
+.Search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  margin: auto;
+  height: 100px;
+}
+
+.movie-card {
+  width: 180px;
+  border-radius: 12px;
+  background-color: #1a1a40;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+button {
+  padding: 8px 20px;
+  font-size: 16px;
+  border: none;
+  background-color: #eee;
+  color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #ddd;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 5px #888;
+}
+
+.active-btn {
+  background-color: #007bff; 
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 8px #0056b3;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+.movie-card img {
+  width: 100%;
+  height: 270px;
+  object-fit: cover;
+  border-bottom: 1px solid #333;
+}
+
+.no-image {
+  width: 100%;
+  height: 270px;
+  background-color: #444;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: italic;
+  font-size: 16px;
+}
+
+.movie-title {
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
+@media (max-width: 600px) {
+  .movie-card {
+    width: 140px;
+  }
+
+  .movie-card img,
+  .no-image {
+    height: 220px;
+  }
+
+  .movie-title {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .header_mani {
+    display: flex;
+    justify-content: space-between;
+    text-align: center  ;
+    padding: 10px;
+  }
+
+  .tvsearch {
+    
+    gap: 10px;
+  }
+
+  .logo {
+    width: 140px;
+    height: auto;
+    margin-bottom: -6px;
+  }
+
+  .text_center h1 {
+    font-size: 50px;
+  }
+
+  .text_center p {
+    font-size: 18px;
+  }
+
+  .text_center input {
+    width: 90%;
+    max-width: 400px;
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .text_center button {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+
+  .movieWrapper {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0.5rem;
+  }
+
+  .movieBOx {
+    height: auto;
+  }
+
+  .nameimg {
+    width: 150px;
+    height: 220px;
+  }
+
+  .img {
+    flex-direction: column;
+    padding: 40px 20px;
+    gap: 20px;
+  }
+
+  .movie-poster {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .text {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .btn1 {
+    /* flex-direction: column; */
+    gap: 10px;
+  }
+
+  .show {
+    display: flex;
+    justify-content:center;
+    gap: px;
+  }
+
+  .show input {
+    
+       width: 278px;
+    height: 40px;
+    padding: 0 20px;
+    border: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    font-size: 10px;
+    outline: none;
+    background-color: white;
+    color: #000;
+  }
+
+  .btn {
+      width: 60px;
+    height: 40px;
+    background-color: orange;
+    color: #0c0101;
+    border-radius: 0 30px 30px 0;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .span {
+    font-size: 36px;
+  }
+
+  .Terms ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .text_center h1 {
+    font-size: 36px;
+  }
+
+  .text_center p {
+    font-size: 16px;
+  }
+
+  .logo {
+    width: 120px;
+  }
+
+  .tvsearch li a {
+    font-size: 16px;
+  }
+
+  .cursor {
+    font-size: 20px;
+  }
+
+  .Welcome {
+    font-size: 60px;
+  }
+
+  .para {
+    font-size: 18px;
+  }
 }
