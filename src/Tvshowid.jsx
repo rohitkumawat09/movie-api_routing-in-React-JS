@@ -6,7 +6,7 @@ const apikey = "3fb4c3ddfc88192745a5708f0de70cba";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const PROFILE_BASE_URL = "https://image.tmdb.org/t/p/w200";
 
-function Singel() {
+function Tvshowid() {
   const { id } = useParams();
   const [movieDetails, setMovieDetails] = useState({});
   const [trailerKey, setTrailerKey] = useState(null);
@@ -18,25 +18,27 @@ function Singel() {
     const fetchMovieDetails = async () => {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}?api_key=${apikey}`
+          `https://api.themoviedb.org/3/tv/${id}?api_key=${apikey}`
         );
+        if (!response.ok) throw new Error("Failed to fetch TV details");
         const data = await response.json();
         setMovieDetails(data);
       } catch (error) {
-        console.error("Error fetching movie details:", error);
+        console.error("Error fetching TV details:", error);
       }
     };
 
     const fetchTrailer = async () => {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apikey}`
+          `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${apikey}`
         );
+        if (!response.ok) throw new Error("Failed to fetch trailer");
         const data = await response.json();
-        const trailer = data.results.find(
+        const trailer = data?.results?.find(
           (video) => video.type === "Trailer" && video.site === "YouTube"
         );
-        setTrailerKey(trailer ? trailer.key : null);
+        setTrailerKey(trailer?.key || null);
       } catch (error) {
         console.error("Error fetching trailer:", error);
       }
@@ -45,21 +47,22 @@ function Singel() {
     const fetchCredits = async () => {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apikey}`
+          `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${apikey}`
         );
+        if (!response.ok) throw new Error("Failed to fetch credits");
         const data = await response.json();
-        setCast(data.cast || []);
+        setCast(data?.cast || []);
 
-        const directors = data.crew.filter((member) => member.job === "Director");
-        setDirector(directors.length > 0 ? directors[0].name : null);
+        const directors = data?.crew?.filter((member) => member.job === "Director");
+        setDirector(directors?.[0]?.name || null);
 
-        const writers = data.crew.filter(
+        const writers = data?.crew?.filter(
           (member) =>
             member.job === "Writer" ||
             member.job === "Screenplay" ||
             member.job === "Story"
         );
-        setWriter(writers.length > 0 ? writers.map((w) => w.name).join(", ") : null);
+        setWriter(writers?.map((w) => w.name).join(", ") || null);
       } catch (error) {
         console.error("Error fetching credits:", error);
       }
@@ -69,16 +72,16 @@ function Singel() {
     fetchTrailer();
     fetchCredits();
   }, [id]);
-const formatDate = (dateString) => {
-  if (!dateString) return "";
-  const d = new Date(dateString);
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-  return `${d.getDate()},${monthNames[d.getMonth()]},${d.getFullYear()}`;
-};
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const d = new Date(dateString);
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    return `${d.getDate()}, ${monthNames[d.getMonth()]}, ${d.getFullYear()}`;
+  };
 
   const formatRuntime = (runtime) => {
     if (!runtime) return "";
@@ -94,21 +97,23 @@ const formatDate = (dateString) => {
           {movieDetails.poster_path && (
             <img
               src={`${IMAGE_BASE_URL}${movieDetails.poster_path}`}
-              alt={movieDetails.title}
+              alt={movieDetails.name}
               className="movie-poster"
             />
           )}
         </div>
 
         <div className="text">
-          <h1>{movieDetails.tagline}</h1>
-          <h2>{movieDetails.original_title}</h2>
-          <p>{movieDetails.overview}</p>
+          <h1>{movieDetails.tagline || ""}</h1>
+          <h2>{movieDetails.name || ""}</h2>
+          <p>{movieDetails.overview || ""}</p>
 
           <div className="movie-details">
             <p><strong>Status:</strong> {movieDetails.status || "N/A"}</p>
-            <p><strong>Release Date:</strong> {formatDate(movieDetails.release_date)}</p>
-            <p><strong>Runtime:</strong> {formatRuntime(movieDetails.runtime)}</p>
+            <p><strong>First Air Date:</strong> {formatDate(movieDetails.first_air_date)}</p>
+            {movieDetails.episode_run_time?.length > 0 && (
+              <p><strong>Episode Runtime:</strong> {formatRuntime(movieDetails.episode_run_time[0])}</p>
+            )}
             {director && <p><strong>Director:</strong> {director}</p>}
             {writer && <p><strong>Writer:</strong> {writer}</p>}
           </div>
@@ -122,9 +127,7 @@ const formatDate = (dateString) => {
                 <FaYoutube />
               </span>
             ) : (
-              <span>
-                <FaYoutube />
-              </span>
+              <span><FaYoutube /></span>
             )}
           </div>
         </div>
@@ -152,7 +155,4 @@ const formatDate = (dateString) => {
   );
 }
 
-export default Singel;
-
-
-
+export default Tvshowid;

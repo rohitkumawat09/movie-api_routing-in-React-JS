@@ -4,7 +4,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import First from "./First";
 import Singel from "./Singel";
  import Movies from "./Movies";
- import Tevsow from "./Tevsow"
+ import Tevsow from "./Tvshow"
+import Tvshowid from "./Tvshowid";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,8 @@ const router = createBrowserRouter([
       { path: "/tv", element: <App /> },
       { path: "/Allmovies", element: <Movies/> },
       { path: "/TvShows", element: <Tevsow/> },
+     { path: "TvShowsid/:id", element: <Tvshowid/> },
+
 
 
     ],

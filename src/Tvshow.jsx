@@ -12,14 +12,17 @@ const Tevsow = () => {
   const navigatee = useNavigate();
 
   const handleMovieClick = (movie) => {
-    navigatee(`/movie/${movie.id}`);
+  navigatee(`/TvShowsid/${movie.id}`);
+
   };
 
   const fetchMovies = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${BASE_URL}?api_key=${API_KEY}&page=${page}`);
+      
       const data = await response.json();
+      console.log(data.results);
       setMovies(prev => [...prev, ...data.results]);
     } catch (error) {
       console.error("Error fetching movies:", error);
