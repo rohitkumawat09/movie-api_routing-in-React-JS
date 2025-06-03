@@ -58,6 +58,15 @@ export default function HeroSection() {
     return content && content.length > 20 ? content.slice(0, 15) + "..." : content;
   }
 
+   const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const d = new Date(dateString);
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    return `${d.getDate()} ${monthNames[d.getMonth()]}, ${d.getFullYear()}`;
+  };
   const handleMovieClick = (movie) => {
     navigate(`/movie/${movie.id}`);
   };
@@ -107,11 +116,14 @@ export default function HeroSection() {
                   <img
                     src={`${IMAGE_BASE_URL}${movie.poster_path}`}
                     alt={movie.title}
+
                   />
+                  
                 ) : (
                   <div className="no-image">No Image</div>
                 )}
                 <p className="movie-title">{trimContentText(movie.title || movie.name)}</p>
+                  <p className="movie-date">{formatDate(movie.release_date)}</p>
               </div>
             ))}
           </div>

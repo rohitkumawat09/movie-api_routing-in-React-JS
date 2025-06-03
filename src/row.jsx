@@ -79,15 +79,19 @@ function Row({ urls, heading, btn1, btn2 }) {
               )}
               <div className="content">
                 <h3>{trimContent(movie.title || movie.name)}</h3>
-                <p>
-                  {movie.release_date
-                    ? new Date(movie.release_date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "2-digit",
-                      })
-                    : ""}
-                </p>
+             <p>
+  {movie.release_date
+    ? (() => {
+        const d = new Date(movie.release_date);
+        const monthNames = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        return `${d.getDate()},${monthNames[d.getMonth()]},${d.getFullYear()}`;
+      })()
+    : ""}
+</p>
+
               </div>
             </div>
           ))

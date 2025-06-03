@@ -9,11 +9,7 @@ import "./App.css";
 function App() {
   return (
     <>
-      {/* Header Section */}
-
-      {/* Rows Section */}
-      {/* <div className="rows-container"> */}
-       
+    
 
        <Backimg/>
         <Row
@@ -34,7 +30,6 @@ function App() {
           btn2="TV Shows"
           urls={[urls.topRatedMovies, urls.topRatedTVShows]}
         />
-      {/* </div> */}
 
 
     </>

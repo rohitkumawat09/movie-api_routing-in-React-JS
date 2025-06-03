@@ -11,6 +11,8 @@ function Singel() {
   const [movieDetails, setMovieDetails] = useState({});
   const [trailerKey, setTrailerKey] = useState(null);
   const [cast, setCast] = useState([]);
+  const [director, setDirector] = useState(null);
+  const [writer, setWriter] = useState(null);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -34,32 +36,56 @@ function Singel() {
         const trailer = data.results.find(
           (video) => video.type === "Trailer" && video.site === "YouTube"
         );
-        if (trailer) {
-          setTrailerKey(trailer.key);
-        } else {
-          setTrailerKey(null);
-        }
+        setTrailerKey(trailer ? trailer.key : null);
       } catch (error) {
         console.error("Error fetching trailer:", error);
       }
     };
 
-    const fetchCast = async () => {
+    const fetchCredits = async () => {
       try {
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apikey}`
         );
         const data = await response.json();
         setCast(data.cast || []);
+
+        const directors = data.crew.filter((member) => member.job === "Director");
+        setDirector(directors.length > 0 ? directors[0].name : null);
+
+        const writers = data.crew.filter(
+          (member) =>
+            member.job === "Writer" ||
+            member.job === "Screenplay" ||
+            member.job === "Story"
+        );
+        setWriter(writers.length > 0 ? writers.map((w) => w.name).join(", ") : null);
       } catch (error) {
-        console.error("Error fetching cast:", error);
+        console.error("Error fetching credits:", error);
       }
     };
 
     fetchMovieDetails();
     fetchTrailer();
-    fetchCast();
+    fetchCredits();
   }, [id]);
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  const d = new Date(dateString);
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  return `${d.getDate()},${monthNames[d.getMonth()]},${d.getFullYear()}`;
+};
+
+
+  const formatRuntime = (runtime) => {
+    if (!runtime) return "";
+    const hours = Math.floor(runtime / 60);
+    const minutes = runtime % 60;
+    return `${hours}h ${minutes}m`;
+  };
 
   return (
     <>
@@ -70,7 +96,6 @@ function Singel() {
               src={`${IMAGE_BASE_URL}${movieDetails.poster_path}`}
               alt={movieDetails.title}
               className="movie-poster"
-            
             />
           )}
         </div>
@@ -79,49 +104,48 @@ function Singel() {
           <h1>{movieDetails.tagline}</h1>
           <h2>{movieDetails.original_title}</h2>
           <p>{movieDetails.overview}</p>
+
+          <div className="movie-details">
+            <p><strong>Status:</strong> {movieDetails.status || "N/A"}</p>
+            <p><strong>Release Date:</strong> {formatDate(movieDetails.release_date)}</p>
+            <p><strong>Runtime:</strong> {formatRuntime(movieDetails.runtime)}</p>
+            {director && <p><strong>Director:</strong> {director}</p>}
+            {writer && <p><strong>Writer:</strong> {writer}</p>}
+          </div>
+
           <div className="span">
             {trailerKey ? (
               <span
-                onClick={() =>
-                  window.open(`https://www.youtube.com/watch?v=${trailerKey}`, "_blank")
-                }
+                onClick={() => window.open(`https://www.youtube.com/watch?v=${trailerKey}`, "_blank")}
                 style={{ cursor: "pointer" }}
               >
-                <FaYoutube  />
+                <FaYoutube />
               </span>
             ) : (
-              <span >
-                <FaYoutube  />
+              <span>
+                <FaYoutube />
               </span>
             )}
           </div>
         </div>
       </div>
 
-      <div className="top_cast" >
+      <div className="top_cast">
         <h2>Top Cast</h2>
-        <div
-          className="cast_list"
-      
-        >
-
+        <div className="cast_list">
           <div className="member">
-                {cast.map((actor) => (
-            <div key={actor.id} className="cast_member" >
-              {actor.profile_path && (
-                <img
-                  src={`${PROFILE_BASE_URL}${actor.profile_path}`}
-                  alt=""
-                  
-             
-                />
-              )}
+            {cast.map((actor) => (
+              <div key={actor.id} className="cast_member">
+                {actor.profile_path && (
+                  <img
+                    src={`${PROFILE_BASE_URL}${actor.profile_path}`}
+                    alt={actor.name}
+                  />
+                )}
                 <h5 className="actor">{actor.name}</h5>
-
-            </div>
-          ))}
+              </div>
+            ))}
           </div>
-      
         </div>
       </div>
     </>
